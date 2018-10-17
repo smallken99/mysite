@@ -1,0 +1,43 @@
+{% include "polls/head.html" %}
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+    	{% if forloop.first %}
+			<table class="table ">
+				    <thead class="thead-light">
+				      <tr>
+				        <th>房客</th>
+				        <th>租約結束</th>
+				        <th>租金</th>
+				        <th>動作</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+    	{% endif %}
+			<tr>
+				<td><a href="/polls/{{ question.id }}/">{{ question.room }}{{ question.ChName }}</a></td>
+				<td>{{ question.end_date }}</td>
+				<td>{{ question.rent_amt }}</td>
+				<td>
+					<div class="btn-group">
+					  <div class="btn-group">
+					    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					       選擇
+					    </button>
+					    <div class="dropdown-menu">
+					      <a class="dropdown-item" href="/polls/{{ question.id }}/">繳費紀錄</a>
+					      <a class="dropdown-item" href="#">修改</a>
+					      <a class="dropdown-item" href="#">刪除	</a>
+					    </div>
+					  </div>
+					</div>
+				</td>
+			</tr>    	 
+    {% endfor %}
+    		<tbody>
+    		</table>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{% include "polls/footer.html" %}
