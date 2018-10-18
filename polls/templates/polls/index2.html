@@ -30,7 +30,7 @@
 				    <tbody>
     	{% endif %}
 			<tr>
-				<td><a href="#">{{ sf03.DASHBOARD }}</a></td>
+				<td>{{ sf03.DASHBOARD }}</td>
 				<td>{{ sf03.THIS_DEGREES }}</td>
 				<td>{{ sf03.TIMES }}</td>
 				<td>{{ sf03.AVG_NUM }}</td>				
@@ -41,9 +41,8 @@
 					       選擇
 					    </button>
 					    <div class="dropdown-menu">
-					      <a class="dropdown-item" href="/polls/{{ question.id }}/results/">繳費紀錄</a>
-					      <a class="dropdown-item" href="#">修改</a>
-					      <a class="dropdown-item" href="#">刪除	</a>
+					      <button class="dropdown-item elec_data" data-toggle="modal" data-target="#ElecModal" data-id="{{ sf03.DASHBOARD }}">電費紀錄</button>			    	
+					      <a class="dropdown-item" href="#">新增電費單</a>
 					    </div>
 					  </div>
 					</div>
@@ -57,7 +56,6 @@
 {% endif %}
 
 
-
-{% include "polls/modal.html" %}
+{% include "polls/modal2.html" %}
 {% include "polls/footer.html" %}
 

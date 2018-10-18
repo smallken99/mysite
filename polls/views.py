@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
-from .models import DTSF01,DTSF03
+from .models import DTSF01,DTSF03,DTSF04
 
 # Create your views here.
 
@@ -13,6 +13,11 @@ def index(request):
 def electric(request):
     DTSF03_list = DTSF03.objects.order_by("DASHBOARD")
     return render(request, 'polls/index2.html', locals())    
+
+def electricList(request,dashboard_id):
+	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
+	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
+
 
 def detail(request, room_id):
     DTSF01vo = get_object_or_404(DTSF01, pk=room_id)

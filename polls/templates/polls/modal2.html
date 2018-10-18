@@ -1,0 +1,85 @@
+<!-- The Modal -->
+<div class="modal" id="ElecModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">公共電費紀錄</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div id="dashboard"></div>
+        <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th>輸入日期</th>
+                <th>上次度數</th>
+                <th>本次數度</th>
+                <th>總電費</th>
+                <th>平均分攤</th>               
+              </tr>
+            </thead>
+            <tbody id="elec_tbody">
+              
+            </tbody>
+        </table>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+ /* List Item 繳費紀錄*/
+$(document).ready(function() {
+  $("body").on("click",".elec_data",function(){
+    var dashboard_id  = $(this).data("id");
+    console.log('dashboard_id:' + dashboard_id);  
+     $.ajax({
+          dataType: 'json',
+          type:'GET',
+          url: '/polls/electric/' + dashboard_id,
+          data:{}
+      }).done(function(data){
+        console.log("data ok:" + data);
+        var obj = JSON.parse(data);
+      console.log("obj ok:" + obj[0]);
+      $("#dashboard").html("<h3>" + dashboard_id + "電表</h3>");
+      var rows = "";
+      $.each( obj, function( key, value ) {
+              rows =  rows + "<tr>";
+              rows =  rows + "<td>" + value.fields.INPUT_DATE; 
+              rows =  rows + "<td>" + value.fields.LAST_DEGREES; 
+              rows =  rows + "<td>" + value.fields.THIS_DEGREES;
+              rows =  rows + "<td>" + value.fields.ELECTRIC_AMT;
+              rows =  rows + "<td>" + value.fields.AVG_AMT;                            
+              rows =  rows + "</td></tr>";  
+
+      });
+      // rows  = "<ul><li>房客姓名: "+ obj[0].fields.DASHBOARD+ "</li>";
+      // rows = rows + "<li>房號: "+ obj[0].fields.INPUT_DATE + "</li>";
+      // rows = rows + "<li>租約起始日: "+ obj[0].fields.BEGIN_DATE+ "</li>";
+      // rows = rows + "<li>租約到期日: "+ obj[0].fields.END_DATE+ "</li>";
+      // rows = rows + "<li>每月租金: "+ obj[0].fields.RENT_AMT+ "</li>";
+      // rows = rows + "<li>押金: "+ obj[0].fields.DIPOSIT + "</li>";
+      // rows = rows + "<li>公共電表: "+ obj[0].fields.PUB_DASHBOARD + "</li>";
+      // rows = rows + "<li>目前電表度數: "+ obj[0].fields.THIS_DEGREES + "</li>";
+      // rows = rows + "<li>每度電費: "+ obj[0].fields.TIMES + "</li>";
+      // rows = rows + "<li>手機號碼: "+ obj[0].fields.CELL_PHONE+ "</li>";    
+      // rows = rows + "<li>地址: "+ obj[0].fields.ADDRESS + "</li>";
+      // rows = rows + "</ul>";
+          $("#elec_tbody").html(rows);
+      });   
+  });
+}); 
+
+
+</script>
