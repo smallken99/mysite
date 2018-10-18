@@ -1,7 +1,7 @@
 {% include "polls/head.html" %}
-{% if latest_question_list %}
+{% if DTSF01_list %}
     <ul>
-    {% for question in latest_question_list %}
+    {% for sf01 in DTSF01_list %}
     	{% if forloop.first %}
 			<table class="table ">
 				    <thead class="thead-light">
@@ -15,9 +15,9 @@
 				    <tbody>
     	{% endif %}
 			<tr>
-				<td><a href="/polls/{{ question.id }}/">{{ question.room }}{{ question.ChName }}</a></td>
-				<td>{{ question.end_date }}</td>
-				<td>{{ question.rent_amt }}</td>
+				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
+				<td>{{ sf01.END_DATE }}</td>
+				<td>{{ sf01.RENT_AMT }}</td>
 				<td>
 					<div class="btn-group">
 					  <div class="btn-group">
@@ -40,4 +40,8 @@
     <p>No polls are available.</p>
 {% endif %}
 
+
+
+{% include "polls/modal.html" %}
 {% include "polls/footer.html" %}
+

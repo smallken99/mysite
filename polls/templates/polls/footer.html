@@ -1,2 +1,36 @@
 </body>
 </html>
+ <script type="text/javascript">
+	 /* List Item 繳費紀錄*/
+	$(document).ready(function() {
+		$("body").on("click",".cus_data",function(){
+			var cust_id  = $(this).data("id");
+			console.log('cust_id:' + cust_id);	
+		   $.ajax({
+		        dataType: 'json',
+		        type:'GET',
+		        url: '/polls/api/' + cust_id,
+		        data:{}
+		    }).done(function(data){
+		    	console.log("data ok:" + data);
+		    	var obj = JSON.parse(data);
+		 		console.log("obj ok:" + obj[0].fields.NAME);
+		 		rows  = "<ul><li>房客姓名: "+ obj[0].fields.NAME+ "</li>";
+		 		rows = rows + "<li>房號: "+ obj[0].fields.ROOM + "</li>";
+		 		rows = rows + "<li>租約起始日: "+ obj[0].fields.BEGIN_DATE+ "</li>";
+		 		rows = rows + "<li>租約到期日: "+ obj[0].fields.END_DATE+ "</li>";
+		 		rows = rows + "<li>每月租金: "+ obj[0].fields.RENT_AMT+ "</li>";
+		 		rows = rows + "<li>押金: "+ obj[0].fields.DIPOSIT + "</li>";
+		 		rows = rows + "<li>公共電表: "+ obj[0].fields.PUB_DASHBOARD + "</li>";
+		 		rows = rows + "<li>目前電表度數: "+ obj[0].fields.THIS_DEGREES + "</li>";
+		 		rows = rows + "<li>每度電費: "+ obj[0].fields.TIMES + "</li>";
+		 		rows = rows + "<li>手機號碼: "+ obj[0].fields.CELL_PHONE+ "</li>"; 		
+		 		rows = rows + "<li>地址: "+ obj[0].fields.ADDRESS + "</li>";
+		 		rows = rows + "</ul>";
+		        $(".modal-body").html(rows);
+		    });		
+		});
+	});	
+
+ 	
+ </script>
