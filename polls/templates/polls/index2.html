@@ -13,25 +13,27 @@
 
 
 
-{% if DTSF01_list %}
+{% if DTSF03_list %}
     <ul>
-    {% for sf01 in DTSF01_list %}
+    {% for sf03 in DTSF03_list %}
     	{% if forloop.first %}
 			<table class="table ">
 				    <thead class="thead-light">
 				      <tr>
-				        <th>房客</th>
-				        <th>租約結束</th>
-				        <th>租金</th>
+				        <th>電表</th>
+				        <th>目前度數</th>
+				        <th>元/每度</th>
+				        <th>分攤人</th>
 				        <th>動作</th>
 				      </tr>
 				    </thead>
 				    <tbody>
     	{% endif %}
 			<tr>
-				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
-				<td>{{ sf01.END_DATE }}</td>
-				<td>{{ sf01.RENT_AMT }}</td>
+				<td><a href="#">{{ sf03.DASHBOARD }}</a></td>
+				<td>{{ sf03.THIS_DEGREES }}</td>
+				<td>{{ sf03.TIMES }}</td>
+				<td>{{ sf03.AVG_NUM }}</td>				
 				<td>
 					<div class="btn-group">
 					  <div class="btn-group">
