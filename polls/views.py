@@ -10,6 +10,10 @@ def index(request):
     DTSF01_list = DTSF01.objects.order_by("ROOM")
     return render(request, 'polls/index.html', locals())
 
+def electric(request):
+    DTSF01_list = DTSF01.objects.order_by("ROOM")
+    return render(request, 'polls/index2.html', locals())    
+
 def detail(request, room_id):
     DTSF01vo = get_object_or_404(DTSF01, pk=room_id)
     return render(request, 'polls/detail.html', locals())
