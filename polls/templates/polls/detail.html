@@ -3,10 +3,10 @@
   <ul class="nav nav-pills">
     <li class="nav-item">
       <a class="nav-link active" href="/polls/">主頁</a>
-    </li>
+    </td>
     <li class="nav-item">
       <a class="nav-link" href="/polls/electric/">公共電費</a>
-    </li>
+    </td>
   </ul> 
 </div>
 
@@ -17,23 +17,39 @@
 			  <h2>房號：{{DTSF01vo.ROOM}}</h2>
 		{% endif %}
 		<div class="card ">
-			<div class="card-header bg-primary text-white">{{ sf02.INPUT_DATE }}   {{DTSF01vo.NAME}}</div>
+			<div class="card-header bg-primary text-white">
+				{% if sf02.IS_CONF %}
+					{{ sf02.INPUT_DATE }}  {{DTSF01vo.NAME}}
+				{% else %}
+					<font color="pink" id="bill_title{{sf02.id}}">{{ sf02.INPUT_DATE }}  {{DTSF01vo.NAME}}</font>
+				{% endif %}
+				
+			</div>
 			<div class="card-body">
-					<li><label>上次電表度數</label>：{{ sf02.LAST_DEGREES }}</li>
-					<li><label>本次電表度數</label>：{{ sf02.THIS_DEGREES }}</li>
-					<li><label>公共電費</label>：{{ sf02.PUB_ELECTRIC_AMT }}</li>
-					<li><label>個人電費</label>：{{ sf02.ELECTRIC_AMT }}</li>
-					<li><label>租金</label>：{{ sf02.RENT_AMT }}</li>
-					<li><label>押金</label>：{{ sf02.DIPOSIT_AMT }}</li>
-					<li><label>應繳租金</label>：{{ sf02.TOTAL_AMT }}</li>
-					 <textarea cols="30" rows="3">{{ sf02.MESSAGE }}</textarea>
-				</ul>	
+				<table class="table-sm"><tr>
+					<td><label>上次電表度數</label>：<td>{{ sf02.LAST_DEGREES }}</td><tr>
+					<td><label>本次電表度數</label>：<td>{{ sf02.THIS_DEGREES }}</td><tr>
+					<td><label>公共電費</label>：<td>{{ sf02.PUB_ELECTRIC_AMT }}</td><tr>
+					<td><label>個人電費</label>：<td>{{ sf02.ELECTRIC_AMT }}</td><tr>
+					<td><label>租金</label>：<td>{{ sf02.RENT_AMT }}</td><tr>
+					<td><label>押金</label>：<td>{{ sf02.DIPOSIT_AMT }}</td><tr>
+					<td><label>應繳租金</label>：<td>{{ sf02.TOTAL_AMT }}</td><tr>
+					<td colspan="2"><textarea cols="30" rows="3">{{ sf02.MESSAGE }}</textarea></td><tr>
+				</tr></table>	
 			</div>	
-			<div class="card-footer"></div>
+			<div class="card-footer">
+				{% if sf02.IS_CONF %}
+					<button type="button" class="btn btn-success">已繳費</button>
+				{% else %}
+					<button type="button" class="btn btn-danger bill" data-id="{{sf02.id}}">待繳費</button>
+				{% endif %}
+
+			</div>
 		</div>
 	{% endfor %}
-   			
+{% else %} 
+	找不到房號 {{DTSF01vo.ROOM}} 任何紀錄  			
 {% endif %}
 </div>
-
+{% include "polls/detail_js.html" %}
 {% include "polls/footer.html" %}

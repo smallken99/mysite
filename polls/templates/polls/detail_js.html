@@ -1,0 +1,27 @@
+<script type="text/javascript">
+ /* action 待繳費 → 已繳費*/
+$(document).ready(function() {
+  $("body").on("click",".bill",function(){
+    var bill_id  = $(this).data("id");
+    var thisObj = $(this);
+    console.log('bill_id:' + bill_id);  
+     $.ajax({
+          dataType: 'json',
+          type:'GET',
+          url: '/polls/api/bill/' + bill_id,
+          data:{}
+      }).done(function(data){
+        console.log("data.STATUS:" + data.STATUS);
+        if(data.STATUS == 'OK'){
+          thisObj.removeClass('btn-danger').addClass('btn-success');
+          thisObj.html("已繳費");
+          $("#bill_title"+bill_id).css("color","white");
+          console.log("bill success");
+        }
+ 
+      });   
+  });
+}); 
+
+
+</script>
