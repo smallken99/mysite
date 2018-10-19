@@ -1,11 +1,39 @@
 {% include "polls/head.html" %}
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link active" href="/polls/">主頁</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/polls/electric/">公共電費</a>
+    </li>
+  </ul> 
+</div>
 
-<h1>{{ DTSF01vo.NAME }}</h1>
-<ul>
- 
-    <li>{{ DTSF01vo.NAME  }}</li>
-    <li>{{ DTSF01vo.BEGIN_DATE }}</li>
- 
-</ul>
+<div class="container">
+{% if DTSF02_list %}
+	{% for sf02 in DTSF02_list %}
+		{% if forloop.first %}	
+			  <h2>房號：{{DTSF01vo.ROOM}}</h2>
+		{% endif %}
+		<div class="card ">
+			<div class="card-header bg-primary text-white">{{ sf02.INPUT_DATE }}   {{DTSF01vo.NAME}}</div>
+			<div class="card-body">
+					<li><label>上次電表度數</label>：{{ sf02.LAST_DEGREES }}</li>
+					<li><label>本次電表度數</label>：{{ sf02.THIS_DEGREES }}</li>
+					<li><label>公共電費</label>：{{ sf02.PUB_ELECTRIC_AMT }}</li>
+					<li><label>個人電費</label>：{{ sf02.ELECTRIC_AMT }}</li>
+					<li><label>租金</label>：{{ sf02.RENT_AMT }}</li>
+					<li><label>押金</label>：{{ sf02.DIPOSIT_AMT }}</li>
+					<li><label>應繳租金</label>：{{ sf02.TOTAL_AMT }}</li>
+					 <textarea cols="48" rows="2">{{ sf02.MESSAGE }}</textarea>
+				</ul>	
+			</div>	
+			<div class="card-footer"></div>
+		</div>
+	{% endfor %}
+   			
+{% endif %}
+</div>
 
 {% include "polls/footer.html" %}

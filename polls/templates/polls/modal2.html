@@ -46,7 +46,7 @@ $(document).ready(function() {
      $.ajax({
           dataType: 'json',
           type:'GET',
-          url: '/polls/electric/' + dashboard_id,
+          url: '/polls/api/electric/' + dashboard_id,
           data:{}
       }).done(function(data){
         console.log("data ok:" + data);
