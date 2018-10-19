@@ -1,0 +1,34 @@
+{% include "polls/head.html" %}
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="/polls/">主頁</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="/polls/electric/">公共電費</a>
+    </li>
+  </ul>
+</div>
+
+ 
+<div class='container'>
+{% if message %}
+    <div class='alert alert-warning'>{{ message }}</div>
+{% endif %}
+
+<form name='my form' action='.' method='POST'>
+ 	<input type="hidden" name="times" value="{{times}}">
+ 	<input type="hidden" name="avg_num" value="{{avg_num}}">
+    <table>
+    {{ elec_form.as_table }}
+    </table>
+    <button type="button" class="btn btn-success calculation">計算</button>
+    <!--<input type='submit' value='張貼' onclick='this.disabled=true,this.form.submit()'>
+    <input type='reset' value='清除重填'>-->
+</form>
+</div>
+ 
+{% include "polls/elec2db_js.html" %}
+{% include "polls/footer.html" %}
+

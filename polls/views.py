@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
 from .models import DTSF01,DTSF02,DTSF03,DTSF04
+from polls import  forms  
 
 # Create your views here.
 
@@ -39,4 +40,15 @@ def electricList(request,dashboard_id):
 	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
 	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
 
-	
+def elec2db(request,dashboard_id):
+	dtsf03 = DTSF03.objects.get(pk=dashboard_id)
+	elec_form = forms.ElecForm()
+	elec_form.fields['DASHBOARD'].initial = dtsf03.DASHBOARD
+	elec_form.fields['INPUT_DATE'].initial = "2018-10-20"
+	elec_form.fields['LAST_DEGREES'].initial = dtsf03.THIS_DEGREES
+	elec_form.fields['THIS_DEGREES'].initial = dtsf03.THIS_DEGREES
+	times = dtsf03.TIMES # 元/每度
+	avg_num = dtsf03.AVG_NUM # 分攤人數
+	message = "目前每度電費{}元，由{}人分攤" 
+	message = message.format(times,avg_num)        
+	return render(request, 'polls/elec2db.html', locals())

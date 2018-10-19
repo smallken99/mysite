@@ -1,0 +1,19 @@
+<script type="text/javascript">
+ /* action 待繳費 → 已繳費*/
+$(document).ready(function() {
+  $("body").on("click",".calculation",function(){
+      console.log("start calculation");
+      var times = $("input[name=times]").val() ;
+      var avg_num = $("input[name=avg_num]").val() ;
+      var last_degrees = $("input[name=LAST_DEGREES]").val()
+      var this_degrees = $("input[name=THIS_DEGREES]").val()     
+      var electric_amt = (parseInt(this_degrees)-parseInt(last_degrees))*parseFloat(times);
+      var avg_amt = electric_amt/avg_num;
+      $("input[name=ELECTRIC_AMT]").val(parseInt(electric_amt));
+      $("input[name=AVG_AMT]").val(parseInt(avg_amt));
+      console.log("end calculation");
+  });
+}); 
+
+
+</script>
