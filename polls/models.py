@@ -63,3 +63,6 @@ class DTSF04(models.Model):
 	THIS_DEGREES = models.IntegerField(default=0) #	本次度數
 	ELECTRIC_AMT =  models.IntegerField(default=0) # 總電費金額
 	AVG_AMT =  models.IntegerField(default=0) # 平均分攤金額 
+	
+	def __str__(self):
+		return "<" + self.DASHBOARD + ">" + self.INPUT_DATE
