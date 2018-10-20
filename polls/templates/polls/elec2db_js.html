@@ -1,6 +1,18 @@
 <script type="text/javascript">
  /* action 待繳費 → 已繳費*/
 $(document).ready(function() {
+
+  // 一進畫面直接focus在本次電表度數欄位上
+  $("#id_THIS_DEGREES").focus();
+  $(".insert").hide();
+
+  $("body").on("mousedown","#id_THIS_DEGREES",function(){
+    $(this).val("");
+    $(".calculation").prop("disabled",false);
+    $(".insert").hide();
+  });
+
+
   $("body").on("click",".calculation",function(){
       console.log("start calculation");
       var times = $("input[name=times]").val() ;
@@ -12,7 +24,12 @@ $(document).ready(function() {
       $("input[name=ELECTRIC_AMT]").val(parseInt(electric_amt));
       $("input[name=AVG_AMT]").val(parseInt(avg_amt));
       console.log("end calculation");
+      $(this).prop( "disabled", true );
+      $(".insert").show();
   });
+
+  
+
 }); 
 
 

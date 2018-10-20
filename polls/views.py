@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+import datetime
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
@@ -39,16 +40,28 @@ def electricList(request,dashboard_id):
 	print("dashboard_id",dashboard_id)
 	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
 	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
-
-def elec2db(request,dashboard_id):
+# ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
+def ins(request,dashboard_id):
 	dtsf03 = DTSF03.objects.get(pk=dashboard_id)
 	elec_form = forms.ElecForm()
 	elec_form.fields['DASHBOARD'].initial = dtsf03.DASHBOARD
-	elec_form.fields['INPUT_DATE'].initial = "2018-10-20"
+	elec_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
 	elec_form.fields['LAST_DEGREES'].initial = dtsf03.THIS_DEGREES
-	elec_form.fields['THIS_DEGREES'].initial = dtsf03.THIS_DEGREES
+	elec_form.fields['THIS_DEGREES'].initial = ""
 	times = dtsf03.TIMES # 元/每度
 	avg_num = dtsf03.AVG_NUM # 分攤人數
 	message = "目前每度電費{}元，由{}人分攤" 
 	message = message.format(times,avg_num)        
+	return render(request, 'polls/elec2db.html', locals())
+
+def insto(request):
+	elec_form = forms.ElecForm()
+	if request.method == 'POST':
+		form = forms.ElecForm(request.POST)
+		elec_form = form
+		if form.is_valid():
+			form.save()
+			print("save")
+			# return HttpResponseRedirect('/list/')
+	message = "已成功新增!"
 	return render(request, 'polls/elec2db.html', locals())

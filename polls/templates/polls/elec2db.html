@@ -17,13 +17,15 @@
     <div class='alert alert-warning'>{{ message }}</div>
 {% endif %}
 
-<form name='my form' action='.' method='POST'>
+<form name='myform' action='/polls/electric/insto' method='POST'>
+	{% csrf_token %}
  	<input type="hidden" name="times" value="{{times}}">
  	<input type="hidden" name="avg_num" value="{{avg_num}}">
     <table>
     {{ elec_form.as_table }}
     </table>
     <button type="button" class="btn btn-success calculation">計算</button>
+    <button type="submit" class="btn btn-primary insert" >新增</button>
     <!--<input type='submit' value='張貼' onclick='this.disabled=true,this.form.submit()'>
     <input type='reset' value='清除重填'>-->
 </form>

@@ -16,9 +16,10 @@ urlpatterns = [
     path('electric/', views.electric, name='electric'),
     # ex: /polls/electric/B1 公共電費清單
     path('api/electric/<str:dashboard_id>', views.electricList,name='electricList'),
-    # ex: /polls/electric/insert 公共電費 新增繳費
-    path('electric/insert/<str:dashboard_id>', views.elec2db, name='elec2db'),
-
+    # ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
+    path('electric/ins/<str:dashboard_id>', views.ins, name='ins'),
+    # ex: /polls/electric/insto 公共電費 新增繳費 實際新增
+    path('electric/insto', views.insto, name='insto'),
 
 
 ]
