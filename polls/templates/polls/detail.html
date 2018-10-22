@@ -35,6 +35,9 @@
 					<td><label>押金</label>：<td>{{ sf02.DIPOSIT_AMT }}</td><tr>
 					<td><label>應繳租金</label>：<td>{{ sf02.TOTAL_AMT }}</td><tr>
 					<td colspan="2"><textarea cols="30" rows="3">{{ sf02.MESSAGE }}</textarea></td><tr>
+					{% if not sf02.IS_CONF %}
+					<td colspan="2"><div><a href="http://line.naver.jp/R/msg/text/?'+{{ sf02.MESSAGE }}+'" target="_blank"><img src="http://smallken.com/myrent/images/share-a.png" style="width:50%"></a></div></td><tr>	
+					{% endif %}
 				</tr></table>	
 			</div>	
 			<div class="card-footer">
@@ -42,6 +45,7 @@
 					<button type="button" class="btn btn-success">已繳費</button>
 				{% else %}
 					<button type="button" class="btn btn-danger bill" data-id="{{sf02.id}}">待繳費</button>
+
 				{% endif %}
 
 			</div>
