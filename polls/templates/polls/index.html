@@ -33,8 +33,8 @@
 				<tr>
 			{% endif %}
 				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
-				
-				{% if sf01.DAYLINE == 'Y' %}
+
+				{% if sf01.DAYLINE == True %}
 					<td style="color:red">{{ sf01.END_DATE }}</td>
 				{% else %}
 					<td>{{ sf01.END_DATE }}</td>

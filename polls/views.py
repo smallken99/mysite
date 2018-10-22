@@ -15,9 +15,9 @@ def index(request):
 	After45days =  datetime.datetime.now() + datetime.timedelta(days=45)
 	# 找還有未繳費的紀錄,要標示
 	for vo in DTSF01_list:
-		endDate = datetime.datetime(int(vo.END_DATE[:4]),int(vo.END_DATE[5:6]),int(vo.END_DATE[-2:]))
+		endDate = datetime.datetime(int(vo.END_DATE[:4]),int(vo.END_DATE[5:7]),int(vo.END_DATE[-2:]))
 		if After45days > endDate:
-			vo.DAYLINE = "Y"
+			vo.DAYLINE = True
 		dtsf02_list = vo.dtsf02_set.all()
 		for dtsf02 in dtsf02_list:
 			if dtsf02.IS_CONF == False:
@@ -44,6 +44,7 @@ def bill(request,bill_id):
 	return JsonResponse(data)
 # ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
 def ins(request,pk_id):
+	action = "init"
 	dtsf01 = DTSF01.objects.get(pk=pk_id)
 	dtsf02_form = forms.DTSF02Form()
 	dtsf02_form.fields['DTSF01'].initial = pk_id
@@ -58,14 +59,15 @@ def ins(request,pk_id):
 
 def insto(request):
 	dtsf02_form = forms.DTSF02Form()
+	dtsf01_id = ""
 	if request.method == 'POST':
 		form = forms.DTSF02Form(request.POST)
-		dtsf02_form = form
 		if form.is_valid():
 			form.save()
+			dtsf01_id = form['DTSF01'].value()
 			print("save")
 			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
-	message = "已成功新增!"
+	message = "資料已新增!"
 	return render(request, 'polls/ins2db.html', locals())
 
 
