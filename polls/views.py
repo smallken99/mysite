@@ -67,9 +67,9 @@ def insto(request):
 			print("save bill")
 			#更新最近電表度數
 			dtsf01_id = form['DTSF01'].value()
-			THIS_DEGREES = form['THIS_DEGREES'].value()
+			this_degrees = form['THIS_DEGREES'].value()
 			dtsf01vo = DTSF01.objects.get(pk=dtsf01_id)
-			dtsf01vo.THIS_DEGREES = THIS_DEGREES
+			dtsf01vo.THIS_DEGREES = this_degrees
 			dtsf01vo.save()
 			print("save THIS_DEGREES",dtsf01vo.THIS_DEGREES)
 			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
