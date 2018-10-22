@@ -1,0 +1,38 @@
+<script type="text/javascript">
+ /* action 待繳費 → 已繳費*/
+$(document).ready(function() {
+  
+  // 一進畫面直接focus在本次電表度數欄位上
+  $("#id_THIS_DEGREES").focus();
+  $(".insert").hide();
+
+  $("body").on("mousedown","#id_THIS_DEGREES",function(){
+    $(this).val("");
+    $(".calculation").prop("disabled",false);
+    $(".insert").hide();
+  });
+
+
+  $("body").on("click",".calculation",function(){
+      console.log("start calculation");
+      var times = $("input[name=times]").val() ;
+      var last_degrees = $("input[name=LAST_DEGREES]").val()
+      var this_degrees = $("input[name=THIS_DEGREES]").val()     
+      var electric_amt = (parseInt(this_degrees)-parseInt(last_degrees))*parseFloat(times);
+      var rent_amt = $("input[name=RENT_AMT]").val()  
+      var total_amt = parseInt(electric_amt) + parseInt(rent_amt);
+      $("input[name=ELECTRIC_AMT]").val(parseInt(electric_amt));
+      $("input[name=TOTAL_AMT]").val(total_amt);
+      var msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt;
+      $("textarea[name=MESSAGE]").val(msg);
+      console.log("end calculation");
+      $(this).prop( "disabled", true );
+      $(".insert").show();
+  });
+
+  
+
+}); 
+
+
+</script>

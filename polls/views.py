@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 import datetime
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core import serializers
@@ -10,8 +11,19 @@ from polls import  forms
 
 # ex: /polls/ 主頁
 def index(request):
-    DTSF01_list = DTSF01.objects.order_by("ROOM")
-    return render(request, 'polls/index.html', locals())
+	DTSF01_list = DTSF01.objects.order_by("ROOM")
+	After45days =  datetime.datetime.now() + datetime.timedelta(days=45)
+	# 找還有未繳費的紀錄,要標示
+	for vo in DTSF01_list:
+		endDate = datetime.datetime(int(vo.END_DATE[:4]),int(vo.END_DATE[5:6]),int(vo.END_DATE[-2:]))
+		if After45days > endDate:
+			vo.DAYLINE = "Y"
+		dtsf02_list = vo.dtsf02_set.all()
+		for dtsf02 in dtsf02_list:
+			if dtsf02.IS_CONF == False:
+				vo.IS_CONF = False
+	return render(request, 'polls/index.html', locals())
+
 # ex: /polls/api/1 房客基本資料
 def api(request,cust_id):
 	DTSF01_object = DTSF01.objects.get(pk=cust_id)
@@ -20,7 +32,7 @@ def api(request,cust_id):
 # ex: /polls/list/5 繳費清單
 def list(request, dashboard_id):
     DTSF01vo = get_object_or_404(DTSF01, pk=dashboard_id)
-    DTSF02_list = DTSF01vo.dtsf02_set.order_by("-INPUT_DATE")
+    DTSF02_list = DTSF01vo.dtsf02_set.order_by("-INPUT_DATE","-pk")
     print(DTSF02_list)
     return render(request, 'polls/detail.html', locals())
 # ex: /polls/api/bill/5 待繳費→已繳費
@@ -30,6 +42,33 @@ def bill(request,bill_id):
 	status = downtown_store.save()
 	data = {'STATUS': "OK" }
 	return JsonResponse(data)
+# ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
+def ins(request,pk_id):
+	dtsf01 = DTSF01.objects.get(pk=pk_id)
+	dtsf02_form = forms.DTSF02Form()
+	dtsf02_form.fields['DTSF01'].initial = pk_id
+	dtsf02_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
+	dtsf02_form.fields['LAST_DEGREES'].initial = dtsf01.THIS_DEGREES
+	dtsf02_form.fields['THIS_DEGREES'].initial = ""
+	dtsf02_form.fields['RENT_AMT'].initial = dtsf01.RENT_AMT
+	times = dtsf01.TIMES # 元/每度
+	message = "計算公式,目前每度電費{}元" 
+	message = message.format(times)        
+	return render(request, 'polls/ins2db.html', locals())
+
+def insto(request):
+	dtsf02_form = forms.DTSF02Form()
+	if request.method == 'POST':
+		form = forms.DTSF02Form(request.POST)
+		dtsf02_form = form
+		if form.is_valid():
+			form.save()
+			print("save")
+			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
+	message = "已成功新增!"
+	return render(request, 'polls/ins2db.html', locals())
+
+
 
 # ex: /polls/electric/ 公共電費
 def electric(request):
@@ -41,9 +80,9 @@ def electricList(request,dashboard_id):
 	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
 	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
 # ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
-def ins(request,dashboard_id):
+def elec_ins(request,dashboard_id):
 	dtsf03 = DTSF03.objects.get(pk=dashboard_id)
-	elec_form = forms.ElecForm()
+	elec_form = forms.DTSF04Form()
 	elec_form.fields['DASHBOARD'].initial = dtsf03.DASHBOARD
 	elec_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
 	elec_form.fields['LAST_DEGREES'].initial = dtsf03.THIS_DEGREES
@@ -54,8 +93,8 @@ def ins(request,dashboard_id):
 	message = message.format(times,avg_num)        
 	return render(request, 'polls/elec2db.html', locals())
 
-def insto(request):
-	elec_form = forms.ElecForm()
+def elec_insto(request):
+	elec_form = forms.DTSF04Form()
 	if request.method == 'POST':
 		form = forms.ElecForm(request.POST)
 		elec_form = form

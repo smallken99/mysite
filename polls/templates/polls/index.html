@@ -27,10 +27,20 @@
 				    </thead>
 				    <tbody>
     	{% endif %}
-			<tr>
+			{% if sf01.IS_CONF == False %}
+				<tr  class="table-warning">
+			{% else %}
+				<tr>
+			{% endif %}
 				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
-				<td>{{ sf01.END_DATE }}</td>
-				<td>{{ sf01.RENT_AMT }}</td>
+				
+				{% if sf01.DAYLINE == 'Y' %}
+					<td style="color:red">{{ sf01.END_DATE }}</td>
+				{% else %}
+					<td>{{ sf01.END_DATE }}</td>
+				{% endif %}
+				
+				<td >{{ sf01.RENT_AMT }}</td>
 				<td>
 					<div class="btn-group">
 					  <div class="btn-group">
@@ -38,8 +48,8 @@
 					       選擇
 					    </button>
 					    <div class="dropdown-menu">
-					      <a class="dropdown-item" href="/polls/list/{{sf01.id}}">繳費紀錄</a>
-					      <a class="dropdown-item" href="#">新增繳費單</a>
+					      <a class="dropdown-item" href="{% url 'list' sf01.id %}">繳費紀錄</a>
+					      <a class="dropdown-item" href="{% url 'ins' sf01.id %}">新增繳費單</a>
 					    </div>
 					  </div>
 					</div>
