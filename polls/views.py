@@ -64,8 +64,14 @@ def insto(request):
 		form = forms.DTSF02Form(request.POST)
 		if form.is_valid():
 			form.save()
+			print("save bill")
+			#更新最近電表度數
 			dtsf01_id = form['DTSF01'].value()
-			print("save")
+			THIS_DEGREES = form['THIS_DEGREES'].value()
+			dtsf01vo = DTSF01.objects.get(pk=dtsf01_id)
+			dtsf01vo.THIS_DEGREES = THIS_DEGREES
+			dtsf01vo.save()
+			print("save THIS_DEGREES",dtsf01vo.THIS_DEGREES)
 			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
 	message = "資料已新增!"
 	return render(request, 'polls/ins2db.html', locals())
@@ -98,11 +104,18 @@ def elec_ins(request,dashboard_id):
 def elec_insto(request):
 	elec_form = forms.DTSF04Form()
 	if request.method == 'POST':
-		form = forms.ElecForm(request.POST)
-		elec_form = form
+		form = forms.DTSF04Form(request.POST)
+		ROOM = form['DASHBOARD'].value()
+		THIS_DEGREES = form['THIS_DEGREES'].value()
+		print(THIS_DEGREES)
 		if form.is_valid():
 			form.save()
-			print("save")
+			print("save bill")
+			#更新最近電表度數
+			dtsf03vo = DTSF03.objects.get(DASHBOARD = ROOM)
+			dtsf03vo.THIS_DEGREES = THIS_DEGREES
+			dtsf03vo.save()
+			print("save THIS_DEGREES",dtsf03vo.THIS_DEGREES)
 			# return HttpResponseRedirect('/list/')
 	message = "已成功新增!"
 	return render(request, 'polls/elec2db.html', locals())
