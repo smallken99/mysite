@@ -22,7 +22,7 @@ def index(request):
 		for dtsf02 in dtsf02_list:
 			if dtsf02.IS_CONF == False:
 				vo.IS_CONF = False
-	return render(request, 'polls/index.html', locals())
+	return render(request, 'index.html', locals())
 
 # ex: /polls/api/1 房客基本資料
 def api(request,cust_id):
@@ -34,7 +34,7 @@ def list(request, dashboard_id):
     DTSF01vo = get_object_or_404(DTSF01, pk=dashboard_id)
     DTSF02_list = DTSF01vo.dtsf02_set.order_by("-INPUT_DATE","-pk")
     print(DTSF02_list)
-    return render(request, 'polls/detail.html', locals())
+    return render(request, 'detail.html', locals())
 # ex: /polls/api/bill/5 待繳費→已繳費
 def bill(request,bill_id):
 	downtown_store  = DTSF02.objects.get(pk=bill_id)
@@ -55,7 +55,7 @@ def ins(request,pk_id):
 	times = dtsf01.TIMES # 元/每度
 	message = "計算公式,目前每度電費{}元" 
 	message = message.format(times)        
-	return render(request, 'polls/ins2db.html', locals())
+	return render(request, 'ins2db.html', locals())
 
 def insto(request):
 	dtsf02_form = forms.DTSF02Form()
@@ -74,14 +74,14 @@ def insto(request):
 			print("save THIS_DEGREES",dtsf01vo.THIS_DEGREES)
 			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
 	message = "資料已新增!"
-	return render(request, 'polls/ins2db.html', locals())
+	return render(request, 'ins2db.html', locals())
 
 
 
 # ex: /polls/electric/ 公共電費
 def electric(request):
     DTSF03_list = DTSF03.objects.order_by("DASHBOARD")
-    return render(request, 'polls/index2.html', locals())    
+    return render(request, 'index2.html', locals())    
 # ex: /polls/electric/B1 公共電費清單
 def electricList(request,dashboard_id):
 	print("dashboard_id",dashboard_id)
@@ -99,7 +99,7 @@ def elec_ins(request,dashboard_id):
 	avg_num = dtsf03.AVG_NUM # 分攤人數
 	message = "目前每度電費{}元，由{}人分攤" 
 	message = message.format(times,avg_num)        
-	return render(request, 'polls/elec2db.html', locals())
+	return render(request, 'elec2db.html', locals())
 
 def elec_insto(request):
 	elec_form = forms.DTSF04Form()
@@ -118,4 +118,4 @@ def elec_insto(request):
 			print("save THIS_DEGREES",dtsf03vo.THIS_DEGREES)
 			# return HttpResponseRedirect('/list/')
 	message = "已成功新增!"
-	return render(request, 'polls/elec2db.html', locals())
+	return render(request, 'elec2db.html', locals())

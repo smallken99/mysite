@@ -1,14 +1,14 @@
-{% include "polls/head.html" %}
+{% include "head.html" %}
 
 <div class="container">
   <ul class="nav nav-pills">
     <li class="nav-item">
-      <a class="nav-link active" href="/polls/">主頁</a>
+      <a class="nav-link" href="/polls/">主頁</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/polls/electric/">公共電費</a>
+      <a class="nav-link active" href="/polls/electric/">公共電費</a>
     </li>
-  </ul> 
+  </ul>
 </div>
 
  
@@ -17,28 +17,20 @@
     <div class='alert alert-warning'>{{ message }}</div>
 {% endif %}
 
-<form name='myform' action='/polls/insto' method='POST'>
+<form name='myform' action='/polls/electric/insto' method='POST'>
 	{% csrf_token %}
  	<input type="hidden" name="times" value="{{times}}">
  	<input type="hidden" name="avg_num" value="{{avg_num}}">
-    
-
-  <table>
-        {{ dtsf02_form.as_table }}
-  </table>
-
-    
-    {% if action == 'init' %}
+    <table>
+    {{ elec_form.as_table }}
+    </table>
     <button type="button" class="btn btn-success calculation">計算</button>
-    {% else %}
-    <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'list' dtsf01_id %}'">繳費紀錄</button>
-    {% endif %}
     <button type="submit" class="btn btn-primary insert" >新增</button>
     <!--<input type='submit' value='張貼' onclick='this.disabled=true,this.form.submit()'>
     <input type='reset' value='清除重填'>-->
 </form>
 </div>
  
-{% include "polls/ins2db_js.html" %}
-{% include "polls/footer.html" %}
+{% include "elec2db_js.html" %}
+{% include "footer.html" %}
 
