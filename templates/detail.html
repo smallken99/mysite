@@ -37,7 +37,7 @@
 					<td><label>應繳租金</label>：<td>{{ sf02.TOTAL_AMT }}</td><tr>
 					<td colspan="2"><textarea cols="30" rows="3">{{ sf02.MESSAGE }}</textarea></td><tr>
 					{% if not sf02.IS_CONF %}
-					<td colspan="2"><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?'+{{ sf02.MESSAGE }}+'" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:50%"></a></div></td><tr>	
+					<td colspan="2"><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?{{ sf02.MESSAGE }}" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:50%"></a></div></td><tr>	
 					{% endif %}
 				</tr></table>	
 			</div>	
