@@ -33,5 +33,5 @@ class DTSF02Form(forms.ModelForm):
         self.fields['DIPOSIT_AMT'].label = '押金'
         self.fields['TOTAL_AMT'].label = '應繳房租'
         self.fields['MESSAGE'].label = '訊息' 
-        self.fields['MESSAGE'].widget = Textarea(attrs={'rows':3, 'cols':30})
+        self.fields['MESSAGE'].widget = Textarea(attrs={'rows':3, 'cols':23})
         self.fields['IS_CONF'].widget = HiddenInput()

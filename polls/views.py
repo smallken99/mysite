@@ -11,7 +11,7 @@ from polls import  forms
 
 # ex: /polls/ 主頁
 def index(request):
-	DTSF01_list = DTSF01.objects.order_by("ROOM")
+	DTSF01_list = DTSF01.objects.filter(STATUS='Y').order_by("ROOM")
 	After45days =  datetime.datetime.now() + datetime.timedelta(days=45)
 	# 找還有未繳費的紀錄,要標示
 	for vo in DTSF01_list:
