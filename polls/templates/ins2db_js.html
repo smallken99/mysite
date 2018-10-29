@@ -3,7 +3,7 @@
 $(document).ready(function() {
   
   // 一進畫面直接focus在本次電表度數欄位上
-  $("#id_THIS_DEGREES").focus();
+  $("#id_THIS_DEGREES").css("border-color","orange");
   $(".insert").hide();
 
   $("body").on("mousedown","#id_THIS_DEGREES",function(){
@@ -12,6 +12,12 @@ $(document).ready(function() {
     $(".insert").hide();
   });
 
+  $("body").on("mousedown","#id_RENT_AMT",function(){ 
+    $(this).val("");
+  });
+  $("body").on("mousedown","#id_DIPOSIT_AMT",function(){ 
+    $(this).val("");
+  });
 
   $("body").on("click",".calculation",function(){
       console.log("start calculation");
@@ -25,7 +31,16 @@ $(document).ready(function() {
               data:{}
         }).done(function(data){
             var obj = JSON.parse(data);
-            var avg_amt = obj[0].fields.AVG_AMT;
+            // var avg_amt = obj[0].fields.AVG_AMT;
+            var input_date = $("input[name=INPUT_DATE]").val();
+            var avg_amt = 0;            
+            // 以輸入日期找到對應的該筆公共電費
+            $.each( obj, function( key, value ) {
+              if(input_date == value.fields.INPUT_DATE){
+                avg_amt = value.fields.AVG_AMT;    
+              }
+            });            
+
             console.log("每人均電費:" + obj[0].fields.AVG_AMT);
             var times = $("input[name=times]").val() ;
             console.log("每度幾元:" + times);
@@ -37,7 +52,7 @@ $(document).ready(function() {
             $("input[name=ELECTRIC_AMT]").val(parseInt(electric_amt));
             $("input[name=PUB_ELECTRIC_AMT]").val(parseInt(avg_amt));
             $("input[name=TOTAL_AMT]").val(total_amt);
-            var msg = "你好，應繳納房租 "+ rent_amt + "，公共電費 " + avg_amt + "，個人電費 "+ electric_amt+ "，合計 "+ total_amt + " 元";   
+            var msg = "你好，應繳納房租 "+ rent_amt + "，公共電費 " + avg_amt + "，個人電費 "+ parseInt(electric_amt)+ "，合計 "+ total_amt + " 元";   
             $("textarea[name=MESSAGE]").val(msg); 
             console.log("end calculation"); 
             $(this).prop( "disabled", true );

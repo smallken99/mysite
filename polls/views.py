@@ -50,7 +50,7 @@ def ins(request,pk_id):
 	dtsf02_form.fields['DTSF01'].initial = pk_id
 	dtsf02_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
 	dtsf02_form.fields['LAST_DEGREES'].initial = dtsf01.THIS_DEGREES
-	dtsf02_form.fields['THIS_DEGREES'].initial = ""
+	dtsf02_form.fields['THIS_DEGREES'].initial = dtsf01.THIS_DEGREES
 	dtsf02_form.fields['RENT_AMT'].initial = dtsf01.RENT_AMT
 	pub_dashboard = dtsf01.PUB_DASHBOARD
 	times = dtsf01.TIMES # 元/每度
