@@ -33,13 +33,13 @@ def api(request,cust_id):
 def list(request, dashboard_id):
     DTSF01vo = get_object_or_404(DTSF01, pk=dashboard_id)
     DTSF02_list = DTSF01vo.dtsf02_set.order_by("-INPUT_DATE","-pk")
-    print(DTSF02_list)
+    # print(DTSF02_list)
     return render(request, 'detail.html', locals())
 # ex: /polls/api/bill/5 待繳費→已繳費
 def bill(request,bill_id):
 	downtown_store  = DTSF02.objects.get(pk=bill_id)
 	downtown_store.IS_CONF = True
-	status = downtown_store.save()
+	downtown_store.save()
 	data = {'STATUS': "OK" }
 	return JsonResponse(data)
 # ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增

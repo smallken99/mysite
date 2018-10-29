@@ -38,10 +38,11 @@ $(document).ready(function() {
             $.each( obj, function( key, value ) {
               if(input_date == value.fields.INPUT_DATE){
                 avg_amt = value.fields.AVG_AMT;    
+                break;
               }
             });            
 
-            console.log("每人均電費:" + obj[0].fields.AVG_AMT);
+            console.log("每人均電費:" + avg_amt);
             var times = $("input[name=times]").val() ;
             console.log("每度幾元:" + times);
             var last_degrees = $("input[name=LAST_DEGREES]").val();
