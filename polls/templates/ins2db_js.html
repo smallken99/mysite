@@ -6,16 +6,16 @@ $(document).ready(function() {
   $("#id_THIS_DEGREES").css("border-color","orange");
   $(".insert").hide();
 
-  $("body").on("mousedown","#id_THIS_DEGREES",function(){
+  $("body").on("focusin","#id_THIS_DEGREES",function(){
     $(this).val("");
     $(".calculation").prop("disabled",false);
     $(".insert").hide();
   });
 
-  $("body").on("mousedown","#id_RENT_AMT",function(){ 
+  $("body").on("focusin","#id_RENT_AMT",function(){ 
     $(this).val("");
   });
-  $("body").on("mousedown","#id_DIPOSIT_AMT",function(){ 
+  $("body").on("focusin","#id_DIPOSIT_AMT",function(){ 
     $(this).val("");
   });
 
@@ -37,8 +37,8 @@ $(document).ready(function() {
             // 以輸入日期找到對應的該筆公共電費
             $.each( obj, function( key, value ) {
               if(input_date == value.fields.INPUT_DATE){
-                avg_amt = value.fields.AVG_AMT;    
-                break;
+                avg_amt = value.fields.AVG_AMT;
+                return true;    
               }
             });            
 
@@ -56,9 +56,6 @@ $(document).ready(function() {
             var msg = "你好，應繳納房租 "+ rent_amt + "，公共電費 " + avg_amt + "，個人電費 "+ parseInt(electric_amt)+ "，合計 "+ total_amt + " 元";   
             $("textarea[name=MESSAGE]").val(msg); 
             console.log("end calculation"); 
-            $(this).prop( "disabled", true );
-            $(".insert").show();      
-
         }); 
       }else{ // 楠梓新路的不需要算公共電費
         var times = $("input[name=times]").val() ;
@@ -72,9 +69,9 @@ $(document).ready(function() {
         var msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt;
         $("textarea[name=MESSAGE]").val(msg);
         console.log("end calculation");
+      }
         $(this).prop( "disabled", true );
         $(".insert").show();
-      }
 
   });
 
