@@ -19,10 +19,10 @@
 			<table class="table ">
 				    <thead class="thead-light">
 				      <tr>
+				        <th>動作</th>
 				        <th>房客</th>
 				        <th>租約結束</th>
 				        <th>租金</th>
-				        <th>動作</th>
 				      </tr>
 				    </thead>
 				    <tbody>
@@ -32,15 +32,6 @@
 			{% else %}
 				<tr>
 			{% endif %}
-				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
-
-				{% if sf01.DAYLINE == True %}
-					<td style="color:red">{{ sf01.END_DATE }}</td>
-				{% else %}
-					<td>{{ sf01.END_DATE }}</td>
-				{% endif %}
-				
-				<td >{{ sf01.RENT_AMT }}</td>
 				<td>
 					<div class="btn-group">
 					  <div class="btn-group">
@@ -54,6 +45,16 @@
 					  </div>
 					</div>
 				</td>
+				<td data-toggle="modal" data-target="#CusModal" class="cus_data" data-id="{{sf01.id}}"><a href="#">{{ sf01.ROOM }}{{ sf01.NAME }}</a></td>
+
+				{% if sf01.DAYLINE == True %}
+					<td style="color:red">{{ sf01.END_DATE }}</td>
+				{% else %}
+					<td>{{ sf01.END_DATE }}</td>
+				{% endif %}
+				
+				<td >{{ sf01.RENT_AMT }}</td>
+
 			</tr>    	 
     {% endfor %}
     		<tbody>

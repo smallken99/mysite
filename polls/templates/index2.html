@@ -20,20 +20,17 @@
 			<table class="table ">
 				    <thead class="thead-light">
 				      <tr>
+				      	<th>動作</th>	
 				        <th>電表</th>
 				        <th>目前度數</th>
 				        <th>元/每度</th>
 				        <th>分攤人</th>
-				        <th>動作</th>
+
 				      </tr>
 				    </thead>
 				    <tbody>
     	{% endif %}
 			<tr>
-				<td>{{ sf03.DASHBOARD }}</td>
-				<td>{{ sf03.THIS_DEGREES }}</td>
-				<td>{{ sf03.TIMES }}</td>
-				<td>{{ sf03.AVG_NUM }}</td>				
 				<td>
 					<div class="btn-group">
 					  <div class="btn-group">
@@ -47,6 +44,11 @@
 					  </div>
 					</div>
 				</td>
+				<td>{{ sf03.DASHBOARD }}</td>
+				<td>{{ sf03.THIS_DEGREES }}</td>
+				<td>{{ sf03.TIMES }}</td>
+				<td>{{ sf03.AVG_NUM }}</td>				
+
 			</tr>    	 
     {% endfor %}
     		<tbody>
