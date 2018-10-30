@@ -2,6 +2,7 @@
 from django import forms
 from polls import models
 from django.forms.widgets import HiddenInput,Textarea,DateInput
+from .models import DTSF01
  
 class DTSF04Form(forms.ModelForm):
     class Meta:
@@ -24,6 +25,7 @@ class DTSF02Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DTSF02Form, self).__init__(*args, **kwargs)
         self.fields['DTSF01'].label = '房客'
+        self.fields['DTSF01'].choices = [(x.pk, x.ROOM+x.NAME) for x in DTSF01.objects.filter(STATUS='Y')]
         self.fields['INPUT_DATE'].label = '輸入日期'
         self.fields['LAST_DEGREES'].label = '上次電表度數'
         self.fields['THIS_DEGREES'].label = '本次電表度數'
