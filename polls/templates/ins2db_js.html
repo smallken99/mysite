@@ -12,7 +12,12 @@ $(document).ready(function() {
     $(".insert").hide();
   });
 
+
+
   $("body").on("focusin","#id_RENT_AMT",function(){ 
+    $(this).val("");
+  });
+  $("body").on("focusin","#id_ELECTRIC_AMT",function(){ 
     $(this).val("");
   });
   $("body").on("focusin","#id_DIPOSIT_AMT",function(){ 
@@ -61,12 +66,22 @@ $(document).ready(function() {
         var times = $("input[name=times]").val() ;
         var last_degrees = $("input[name=LAST_DEGREES]").val();
         var this_degrees = $("input[name=THIS_DEGREES]").val();    
-        var electric_amt = (parseInt(this_degrees)-parseInt(last_degrees))*parseFloat(times);
+        var electric_amt = $("input[name=ELECTRIC_AMT]").val();
+        if(parseInt(electric_amt) == 0){ // 個人電費
+          electric_amt = (parseInt(this_degrees)-parseInt(last_degrees))*parseFloat(times);
+        }
+        var diposit_amt  =  $("input[name=DIPOSIT_AMT]").val() ; 
         var rent_amt = $("input[name=RENT_AMT]").val() ; 
-        var total_amt = parseInt(electric_amt) + parseInt(rent_amt);
+        var total_amt = parseInt(electric_amt) + parseInt(diposit_amt) + parseInt(rent_amt)
         $("input[name=ELECTRIC_AMT]").val(parseInt(electric_amt));
         $("input[name=TOTAL_AMT]").val(total_amt);
-        var msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt;
+        var msg ="";
+        if(last_degrees == this_degrees){ //繳押金或其他case不用繳電費的情形
+          msg =  "繳納押金 "+ diposit_amt + " ,租金 "+ rent_amt + " ,電費 " + electric_amt + ",共合計 "+ total_amt +"元";
+        }else{
+          msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt;
+        }
+
         $("textarea[name=MESSAGE]").val(msg);
         console.log("end calculation");
       }
