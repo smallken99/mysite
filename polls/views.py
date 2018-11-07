@@ -54,6 +54,7 @@ def ins(request,pk_id):
 	dtsf02_form.fields['RENT_AMT'].initial = dtsf01.RENT_AMT
 	pub_dashboard = dtsf01.PUB_DASHBOARD
 	times = dtsf01.TIMES # 元/每度
+	room = dtsf01.ROOM
 	message = "計算公式,目前每度電費{}元" 
 	message = message.format(times)        
 	return render(request, 'ins2db.html', locals())

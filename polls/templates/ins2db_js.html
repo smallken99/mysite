@@ -27,6 +27,7 @@ $(document).ready(function() {
   $("body").on("click",".calculation",function(){
       console.log("start calculation");
       var pub_dashboard = $("input[name=pub_dashboard]").val();
+      var room = $("input[name='room'").val();
       if(pub_dashboard.startsWith("B")){ //楠都東街的要算公共電費
         console.log("todo B1,B2,B3...");
         $.ajax({
@@ -77,9 +78,9 @@ $(document).ready(function() {
         $("input[name=TOTAL_AMT]").val(total_amt);
         var msg ="";
         if(last_degrees == this_degrees){ //繳押金或其他case不用繳電費的情形
-          msg =  "繳納押金 "+ diposit_amt + " ,租金 "+ rent_amt + " ,電費 " + electric_amt + ",共合計 "+ total_amt +"元";
+          msg =  "繳納押金 "+ diposit_amt + " ,租金 "+ rent_amt + " ,電費 " + electric_amt + ",共合計 "+ total_amt +"元(" +room +")";
         }else{
-          msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt;
+          msg = "你好，本月房租共 " + total_amt + " 元(" + this_degrees + "-" + last_degrees + ")x"+times+"+"+rent_amt+"="+total_amt +"(" +room +")";
         }
 
         $("textarea[name=MESSAGE]").val(msg);
