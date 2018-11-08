@@ -27,7 +27,7 @@ $(document).ready(function() {
   $("body").on("click",".calculation",function(){
       console.log("start calculation");
       var pub_dashboard = $("input[name=pub_dashboard]").val();
-      var room = $("input[name='room'").val();
+      var room = $("input[name=room]").val();
       if(pub_dashboard.startsWith("B")){ //楠都東街的要算公共電費
         console.log("todo B1,B2,B3...");
         $.ajax({
