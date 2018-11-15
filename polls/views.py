@@ -74,9 +74,9 @@ def insto(request):
 			dtsf01vo.THIS_DEGREES = this_degrees
 			dtsf01vo.save()
 			print("save THIS_DEGREES",dtsf01vo.THIS_DEGREES)
-			# return HttpResponseRedirect('/polls/list/' + str(dtsf02_form.cleaned_data['DTSF01'].pk))
-	message = "資料已新增!"
-	return render(request, 'ins2db.html', locals())
+	return HttpResponseRedirect('/polls/list/' + str(dtsf01_id))
+	# message = "資料已新增!"
+	# return render(request, 'ins2db.html', locals())
 
 
 

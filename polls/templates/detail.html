@@ -27,21 +27,48 @@
 				
 			</div>
 			<div class="card-body">
-				<table class="table-sm"><tr>
-					<td><label>上次電表度數</label>：<td>{{ sf02.LAST_DEGREES }}</td><tr>
-					<td><label>本次電表度數</label>：<td>{{ sf02.THIS_DEGREES }}</td><tr>
-					<td><label>公共電費</label>：<td>{{ sf02.PUB_ELECTRIC_AMT }}</td><tr>
-					<td><label>個人電費</label>：<td>{{ sf02.ELECTRIC_AMT }}</td><tr>
-					<td><label>租金</label>：<td>{{ sf02.RENT_AMT }}</td><tr>
-					<td><label>押金</label>：<td>{{ sf02.DIPOSIT_AMT }}</td><tr>
-					<td><label>應繳租金</label>：<td>{{ sf02.TOTAL_AMT }}</td><tr>
-					<td colspan="2"><textarea cols="30" rows="3">{{ sf02.MESSAGE }}</textarea></td><tr>
-					{% if not sf02.IS_CONF %}
-					<td colspan="2"><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?{{ sf02.MESSAGE }}" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:50%"></a></div></td><tr>	
-					{% endif %}
-				</tr></table>	
+				<table class="table-sm">
+					<tr>
+						<td><label>上次電表度數</label>：<td>{{ sf02.LAST_DEGREES }}</td>
+					</tr>
+					<tr>
+						<td><label>本次電表度數</label>：<td>{{ sf02.THIS_DEGREES }}</td>
+					</tr>
+					<tr>
+						<td><label>公共電費</label>：<td>{{ sf02.PUB_ELECTRIC_AMT }}</td>
+					</tr>
+					<tr>
+						<td><label>個人電費</label>：<td>{{ sf02.ELECTRIC_AMT }}</td>
+					</tr>
+					<tr>
+						<td><label>租金</label>：<td>{{ sf02.RENT_AMT }}</td>
+					</tr>
+					<tr>
+						<td><label>押金</label>：<td>{{ sf02.DIPOSIT_AMT }}</td>
+					</tr>
+					<tr>
+						<td colspan="2"><hr/></td>
+					</tr>
+					<tr>
+						<td><label>應繳租金</label>：<td><h4><strong>NT$ {{ sf02.TOTAL_AMT }}</strong></h4></td>
+					</tr>
+					<tr>
+						<td colspan="2"><div class='alert alert-primary'>{{ sf02.MESSAGE }}</div></td>
+					</tr>
+
+					{% if sf02.IS_CONF %}
+					<tr  colspan="2">
+						<td><button type="button" class="btn btn-success">已繳費</button></td>
+					{% else %}
+					<tr>
+						<td><button type="button" class="btn btn-danger bill" data-id="{{sf02.id}}">待繳費</button></td>
+						<td><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?{{ sf02.MESSAGE }}" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:80%"></a></div></td>
+					{% endif %} 
+
+					</tr>
+				</table>	
 			</div>	
-			<div class="card-footer">
+		<!--	<div class="card-footer">
 				{% if sf02.IS_CONF %}
 					<button type="button" class="btn btn-success">已繳費</button>
 				{% else %}
@@ -49,7 +76,7 @@
 
 				{% endif %}
 
-			</div>
+			</div>-->
 		</div>
 	{% endfor %}
 {% else %} 
