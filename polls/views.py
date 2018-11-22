@@ -87,20 +87,20 @@ def excel(request,dashboard_id,input_date,cust_id):
 	worksheet = workbook.add_worksheet()  #新增一個sheet
 	merge_format = workbook.add_format({
     'bold': 1,
-    'border': 1,
+    'border': 0,
     'align': 'center',
     'valign': 'vcenter',
     'font_name':'Arial'})
     # 'fg_color': 'yellow'})
 	_format = workbook.add_format({
     'bold': 0,
-    'border': 1,
+    'border':0,
     'align': 'center',
     'valign': 'vcenter',
     'font_name':'Arial'})
 	merge_format2 = workbook.add_format({
     'bold': 0,
-    'border': 1,
+    'border': 0,
     'align': 'left',
     'valign': 'vcenter'})
 	worksheet.set_column('B:D', 12) #設定寬度
