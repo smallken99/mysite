@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.core import serializers
 from .models import DTSF01,DTSF02,DTSF03,DTSF04
 from polls import  forms  
+import io
+import xlsxwriter
 
 # Create your views here.
 
@@ -78,7 +80,70 @@ def insto(request):
 	# message = "資料已新增!"
 	# return render(request, 'ins2db.html', locals())
 
+def excel(request,dashboard_id,input_date,cust_id):
+	excel_name = dashboard_id + "_" + input_date + ".xlsx"
+	output = io.BytesIO()  #用BytesIO 來存我們的資料
+	workbook = xlsxwriter.Workbook(output)  #用xlsxwriter.Workbook來開啟我們剛剛建立的BytesIO
+	worksheet = workbook.add_worksheet()  #新增一個sheet
+	merge_format = workbook.add_format({
+    'bold': 1,
+    'border': 1,
+    'align': 'center',
+    'valign': 'vcenter',
+    'font_name':'Arial'})
+    # 'fg_color': 'yellow'})
+	_format = workbook.add_format({
+    'bold': 0,
+    'border': 1,
+    'align': 'center',
+    'valign': 'vcenter',
+    'font_name':'Arial'})
+	merge_format2 = workbook.add_format({
+    'bold': 0,
+    'border': 1,
+    'align': 'left',
+    'valign': 'vcenter'})
+	worksheet.set_column('B:D', 12) #設定寬度
+	worksheet.set_column('E:E', 35) #設定寬度
+	# worksheet.set_row(3, 30) #設定高度
+	worksheet.merge_range('B2:D2', dashboard_id + ' 房號   10-11 月份', merge_format) #合併 B2-D2 儲存格 
+	worksheet.merge_range('B3:B7', '公共電費', merge_format)
+	worksheet.merge_range('B8:B10', '個人電費', merge_format)
+	worksheet.merge_range('B11:C11', '租金', merge_format)
+	worksheet.merge_range('B12:C12', '合計', merge_format)
 
+	worksheet.write(2,2,'上次電表',_format)
+	worksheet.write(3,2,'本次電表',_format)
+	worksheet.write(4,2,'用電數',_format)
+	worksheet.write(5,2,'電費@3.5元',_format)
+	worksheet.write(6,2,'平均每人',merge_format)
+	worksheet.write(7,2,'上次電表',_format)
+	worksheet.write(8,2,'本次電表',_format)
+	worksheet.write(9,2,'個人電費',merge_format)
+
+	DTSF04vo = DTSF04.objects.get(DASHBOARD=dashboard_id,INPUT_DATE=input_date)
+	diff = DTSF04vo.THIS_DEGREES-DTSF04vo.LAST_DEGREES
+	worksheet.write(2,3,DTSF04vo.LAST_DEGREES,_format)
+	worksheet.write(3,3,DTSF04vo.THIS_DEGREES,_format)
+	worksheet.write(4,3,str(diff),_format)
+	worksheet.write(5,3,DTSF04vo.ELECTRIC_AMT,_format)
+	worksheet.write(6,3,DTSF04vo.AVG_AMT,merge_format)
+
+	DTSF01vo = DTSF01.objects.get(pk=cust_id)
+	DTSF02vo = DTSF01vo.dtsf02_set.get(INPUT_DATE=input_date)
+	worksheet.write(7,3,DTSF02vo.LAST_DEGREES,_format)
+	worksheet.write(8,3,DTSF02vo.THIS_DEGREES,_format)
+	worksheet.write(9,3,DTSF02vo.ELECTRIC_AMT,merge_format)
+	worksheet.write(10,3,DTSF02vo.RENT_AMT,merge_format)
+	worksheet.write(11,3,DTSF02vo.TOTAL_AMT,merge_format)
+
+	worksheet.merge_range('E2:E12', "連絡人: 許小姐 \nEmail: oioi7211@gmail.com \n手機: 0921-584584 \n匯入帳號: 渣打銀行 南京分行 \
+                      \n\t銀行代碼 : 052 \n\t帳號 : 1122 00000 33738 \n戶名:黃棋新 \n\n\n請於30號前匯入 , 若有其他問題\n請來電 , 謝謝!   ", merge_format2)
+	workbook.close()  #把workbook關閉
+	output.seek(0)
+	response = HttpResponse(output.read(),content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	response['Content-Disposition'] = "attachment; filename=" + excel_name;
+	return response
 
 # ex: /polls/electric/ 公共電費
 def electric(request):

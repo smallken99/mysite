@@ -15,6 +15,8 @@ urlpatterns = [
     path('ins/<int:pk_id>', views.ins, name='ins'),
     # ex: /polls/insto 個人電費 新增繳費 實際新增
     path('insto', views.insto, name='insto'),
+    # ex: /polls/excel/B1/2018-08-03/2 產生電費小紙條
+    path('excel/<str:dashboard_id>/<str:input_date>/<int:cust_id>', views.excel, name='excel'), 
 
     # ex: /polls/electric/ 公共電費 tab2
     path('electric/', views.electric, name='electric'),

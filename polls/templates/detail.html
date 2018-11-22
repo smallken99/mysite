@@ -50,10 +50,16 @@
 						<td colspan="2"><hr/></td>
 					</tr>
 					<tr>
-						<td><label>應繳租金</label>：<td><h4><strong>NT$ {{ sf02.TOTAL_AMT }}</strong></h4></td>
+						<td><label>應繳租金</label>：<td><h5><strong>NT$ {{ sf02.TOTAL_AMT }}</strong></h5></td>
 					</tr>
 					<tr>
-						<td colspan="2"><div class='alert alert-primary'>{{ sf02.MESSAGE }}</div></td>
+						<td colspan="2">
+							<div class='alert alert-primary'>{{ sf02.MESSAGE }} 
+								{% if DTSF01vo.ROOM|slice:"0:1" == 'B' %}
+								<a href="{% url 'excel' DTSF01vo.ROOM sf02.INPUT_DATE DTSF01vo.pk%}"><img src="{% static "excel.png" %}" alt="下載電費小白單" style="width:5%"></a>
+								{% endif %}
+							</div>
+						</td>
 					</tr>
 
 					{% if sf02.IS_CONF %}
@@ -62,7 +68,7 @@
 					{% else %}
 					<tr>
 						<td><button type="button" class="btn btn-danger bill" data-id="{{sf02.id}}">待繳費</button></td>
-						<td><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?{{ sf02.MESSAGE }}" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:80%"></a></div></td>
+						<td><div id="lineImg"><a href="http://line.naver.jp/R/msg/text/?{{ sf02.MESSAGE }}" target="_blank"><img src="{% static "share-a.png" %}" alt="My image"  style="width:70%"></a></div></td>
 					{% endif %} 
 
 					</tr>
