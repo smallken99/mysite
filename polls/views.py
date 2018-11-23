@@ -84,6 +84,59 @@ def excel(request,dashboard_id,input_date,cust_id):
 	excel_name = dashboard_id + "_" + input_date + ".xlsx"
 	output = io.BytesIO()  #用BytesIO 來存我們的資料
 	workbook = xlsxwriter.Workbook(output)  #用xlsxwriter.Workbook來開啟我們剛剛建立的BytesIO
+	doXlsxProcess(workbook,dashboard_id,input_date,cust_id);
+	workbook.close()  #把workbook關閉
+	output.seek(0)
+	response = HttpResponse(output.read(),content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	response['Content-Disposition'] = "attachment; filename=" + excel_name;
+	return response
+
+# ex: /polls/electric/ 公共電費
+def electric(request):
+    DTSF03_list = DTSF03.objects.order_by("DASHBOARD")
+    return render(request, 'index2.html', locals())    
+# ex: /polls/electric/B1 公共電費清單
+def electricList(request,dashboard_id):
+	print("dashboard_id",dashboard_id)
+	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
+	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
+# ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
+def elec_ins(request,dashboard_id):
+	dtsf03 = DTSF03.objects.get(pk=dashboard_id)
+	elec_form = forms.DTSF04Form()
+	elec_form.fields['DASHBOARD'].initial = dtsf03.DASHBOARD
+	elec_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
+	elec_form.fields['LAST_DEGREES'].initial = dtsf03.THIS_DEGREES
+	elec_form.fields['THIS_DEGREES'].initial = ""
+	times = dtsf03.TIMES # 元/每度
+	avg_num = dtsf03.AVG_NUM # 分攤人數
+	message = "目前每度電費{}元，由{}人分攤" 
+	message = message.format(times,avg_num)        
+	return render(request, 'elec2db.html', locals())
+
+def elec_insto(request):
+	elec_form = forms.DTSF04Form()
+	if request.method == 'POST':
+		form = forms.DTSF04Form(request.POST)
+		ROOM = form['DASHBOARD'].value()
+		THIS_DEGREES = form['THIS_DEGREES'].value()
+		print(THIS_DEGREES)
+		if form.is_valid():
+			form.save()
+			print("save bill")
+			#更新最近電表度數
+			dtsf03vo = DTSF03.objects.get(DASHBOARD = ROOM)
+			dtsf03vo.THIS_DEGREES = THIS_DEGREES
+			dtsf03vo.save()
+			print("save THIS_DEGREES",dtsf03vo.THIS_DEGREES)
+			# return HttpResponseRedirect('/list/')
+	message = "已成功新增!"
+	return render(request, 'elec2db.html', locals())
+
+
+
+# 產生xlsx的程序
+def doXlsxProcess(workbook,dashboard_id,input_date,cust_id):
 	worksheet = workbook.add_worksheet()  #新增一個sheet
 	merge_format = workbook.add_format({
     'bold': 1,
@@ -137,52 +190,5 @@ def excel(request,dashboard_id,input_date,cust_id):
 	worksheet.write(10,3,DTSF02vo.RENT_AMT,merge_format)
 	worksheet.write(11,3,DTSF02vo.TOTAL_AMT,merge_format)
 
-	worksheet.merge_range('E2:E12', "連絡人: 許小姐 \nEmail: oioi7211@gmail.com \n手機: 0921-584584 \n匯入帳號: 渣打銀行 南京分行 \
-                      \n\t銀行代碼 : 052 \n\t帳號 : 1122 00000 33738 \n戶名:黃棋新 \n\n\n請於30號前匯入 , 若有其他問題\n請來電 , 謝謝!   ", merge_format2)
-	workbook.close()  #把workbook關閉
-	output.seek(0)
-	response = HttpResponse(output.read(),content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	response['Content-Disposition'] = "attachment; filename=" + excel_name;
-	return response
-
-# ex: /polls/electric/ 公共電費
-def electric(request):
-    DTSF03_list = DTSF03.objects.order_by("DASHBOARD")
-    return render(request, 'index2.html', locals())    
-# ex: /polls/electric/B1 公共電費清單
-def electricList(request,dashboard_id):
-	print("dashboard_id",dashboard_id)
-	DTSF04_object = DTSF04.objects.filter(DASHBOARD=dashboard_id).order_by("-INPUT_DATE")[:10]
-	return JsonResponse(serializers.serialize('json', DTSF04_object), safe=False)
-# ex: /polls/electric/ins/B1 公共電費 新增繳費 預備新增
-def elec_ins(request,dashboard_id):
-	dtsf03 = DTSF03.objects.get(pk=dashboard_id)
-	elec_form = forms.DTSF04Form()
-	elec_form.fields['DASHBOARD'].initial = dtsf03.DASHBOARD
-	elec_form.fields['INPUT_DATE'].initial = datetime.datetime.now().strftime("%Y-%m-%d")
-	elec_form.fields['LAST_DEGREES'].initial = dtsf03.THIS_DEGREES
-	elec_form.fields['THIS_DEGREES'].initial = ""
-	times = dtsf03.TIMES # 元/每度
-	avg_num = dtsf03.AVG_NUM # 分攤人數
-	message = "目前每度電費{}元，由{}人分攤" 
-	message = message.format(times,avg_num)        
-	return render(request, 'elec2db.html', locals())
-
-def elec_insto(request):
-	elec_form = forms.DTSF04Form()
-	if request.method == 'POST':
-		form = forms.DTSF04Form(request.POST)
-		ROOM = form['DASHBOARD'].value()
-		THIS_DEGREES = form['THIS_DEGREES'].value()
-		print(THIS_DEGREES)
-		if form.is_valid():
-			form.save()
-			print("save bill")
-			#更新最近電表度數
-			dtsf03vo = DTSF03.objects.get(DASHBOARD = ROOM)
-			dtsf03vo.THIS_DEGREES = THIS_DEGREES
-			dtsf03vo.save()
-			print("save THIS_DEGREES",dtsf03vo.THIS_DEGREES)
-			# return HttpResponseRedirect('/list/')
-	message = "已成功新增!"
-	return render(request, 'elec2db.html', locals())
+	worksheet.merge_range('E2:E12', "連絡人: 許小姐 \nEmail: oioi7211@gmail.com \n手機: 0921-584584 \n匯入帳號: \n\t渣打銀行 南京分行 \
+                      \n\t銀行代碼 : 052 \n\t帳號 : 1122 00000 33738 \n\t戶名:黃棋新 \n\n請於30號前匯入 , 若有其他問題\n請來電 , 謝謝!   ", merge_format2)	
