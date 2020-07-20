@@ -27,5 +27,8 @@ urlpatterns = [
     # ex: /polls/electric/insto 公共電費 新增繳費 實際新增
     path('electric/insto', views.elec_insto, name='elec_insto'),
 
+    # ex: /polls/api/stock/2330 股價查詢
+    path('api/stock/<str:stock_id>', views.stock,name='stock'),
+
 
 ]

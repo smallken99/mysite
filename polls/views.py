@@ -8,6 +8,7 @@ from .models import DTSF01,DTSF02,DTSF03,DTSF04
 from polls import  forms  
 import io
 import xlsxwriter
+import twstock
 
 # Create your views here.
 
@@ -192,3 +193,8 @@ def doXlsxProcess(workbook,dashboard_id,input_date,cust_id):
 
 	worksheet.merge_range('E2:E12', "連絡人: 許小姐 \nEmail: oioi7211@gmail.com \n手機: 0921-584584 \n匯入帳號: \n\t渣打銀行 南京分行 \
                       \n\t銀行代碼 : 052 \n\t帳號 : 1122 00000 33738 \n\t戶名:黃棋新 \n\n請於30號前匯入 , 若有其他問題\n請來電 , 謝謝!   ", merge_format2)	
+
+def stock(request,stock_id):
+	stock = twstock.Stock(stock_id)
+	data = {"price":stock.price[-1]}
+	return JsonResponse(data)
